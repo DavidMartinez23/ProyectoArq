@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('attendance', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->dateTime('checked_in_at');
             $table->timestamps();
