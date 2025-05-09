@@ -13,17 +13,35 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <style>
+            body {
+                min-height: 100vh;
+                margin: 0;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #181e29 0%, #ff6b00 100%);
+            }
+            .auth-bg {
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+            .auth-card {
+                background: #fff;
+                padding: 2rem 2.5rem;
+                border-radius: 10px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+                width: 100%;
+                max-width: 400px;
+                margin-top: 2rem;
+            }
+        </style>
     </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-                </a>
-            </div>
-
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
-                {{ $slot }}
+    <body>
+        <div class="auth-bg">
+            <div class="auth-card">
+                @yield('content')
             </div>
         </div>
     </body>

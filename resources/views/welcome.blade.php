@@ -1,28 +1,88 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container mx-auto p-6">
-        <h1 class="text-3xl font-bold text-center mt-10">Bienvenido a la plataforma</h1>
+<style>
+    .welcome-header {
+        background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 10px 10px 0 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-        <div class="flex justify-center mt-10">
-            <div class="bg-white p-6 rounded-lg shadow-md text-center w-96">
-                <h2 class="text-lg font-semibold">Registro de Asistencia</h2>
-                
-                @if(session('success'))
-                    <p class="text-green-500 mt-2">{{ session('success') }}</p>
-                @endif
+    .welcome-card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-top: 2rem;
+        overflow: hidden;
+    }
 
-                @if(!$hasCheckedIn)
-                    <form action="{{ route('attendance.store') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
-                            Marcar Asistencia
-                        </button>
-                    </form>
-                @else
-                    <p class="text-gray-600 mt-4">Ya has marcado asistencia hoy.</p>
-                @endif
+    .welcome-body {
+        background: white;
+        padding: 2.5rem;
+    }
+
+    .welcome-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin: 0;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .welcome-user {
+        font-size: 1.8rem;
+        color: #333;
+        margin-bottom: 2rem;
+    }
+
+    .dashboard-btn {
+        background: #1a73e8;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .dashboard-btn:hover {
+        background: #0d47a1;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(26, 115, 232, 0.3);
+    }
+
+    .welcome-decoration {
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        right: -30px;
+        top: -30px;
+    }
+</style>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="welcome-card">
+                <div class="welcome-header position-relative">
+                    <div class="welcome-decoration"></div>
+                    <h1 class="welcome-title">¡Bienvenido a mi página web!</h1>
+                </div>
+                <div class="welcome-body text-center">
+                    <h2 class="welcome-user">
+                        Hola, {{ auth()->user()->name }}!
+                    </h2>
+                    <a href="{{ route('dashboard') }}" class="dashboard-btn">
+                        Ir al Dashboard
+                    </a>
+                </div>
             </div>
         </div>
     </div>
+</div>
 @endsection
