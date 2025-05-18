@@ -244,7 +244,7 @@
         @auth
             <div class="sidebar">
                 <div class="sidebar-logo">
-                    <i class="fas fa-graduation-cap"></i> Mi Proyecto
+                    <i class="fas fa-graduation-cap"></i> PlatziUnab
                 </div>
                 <div class="sidebar-profile">
                     <i class="fas fa-user-circle"></i>

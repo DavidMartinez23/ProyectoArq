@@ -1,106 +1,85 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="row">
-    <div class="col-md-3">
-        <div class="list-group">
-            <a href="{{ route('teacher.dashboard') }}" class="list-group-item list-group-item-action active">
-                Panel de Profesor
-            </a>
-            <a href="{{ route('teacher.courses.create') }}" class="list-group-item list-group-item-action">
-                Crear Curso
-            </a>
-            <a href="{{ route('teacher.dashboard') }}" class="list-group-item list-group-item-action">
-                Mis Cursos
-            </a>
-        </div>
-    </div>
-    <div class="col-md-9">
-        <h1>Panel de Profesor</h1>
-        
-        <div class="mb-4">
-            <a href="{{ route('teacher.courses.create') }}" class="btn btn-success">
-                <i class="fas fa-plus"></i> Crear Nuevo Curso
-            </a>
-        </div>
-        
-        <div class="card">
-            <div class="card-header">
-                <h5>Mis Cursos</h5>
-            </div>
-            <div class="card-body">
-                @if($courses->count() > 0)
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Título</th>
-                                    <th>Módulos</th>
-                                    <th>Comentarios</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($courses as $course)
-                                    <tr>
-                                        <td>{{ $course->title }}</td>
-                                        <td>{{ $course->modules->count() }}</td>
-                                        <td>{{ $course->comments->count() }}</td>
-                                        <td>
-                                            <a href="{{ route('courses.show', $course) }}" class="btn btn-sm btn-info">
-                                                <i class="fas fa-eye"></i> Ver
-                                            </a>
-                                            <a href="{{ route('teacher.courses.edit', $course) }}" class="btn btn-sm btn-primary">
-                                                <i class="fas fa-edit"></i> Editar
-                                            </a>
-                                            <form action="{{ route('teacher.courses.destroy', $course) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Estás seguro de eliminar este curso?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger">
-                                                    <i class="fas fa-trash"></i> Eliminar
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                @else
-                    <div class="alert alert-info">
-                        No has creado ningún curso todavía. ¡Crea tu primer curso!
-                    </div>
-                @endif
-            </div>
-        </div>
+<style>
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .dashboard-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #fff;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        padding-bottom: 10px;
+    }
+    .action-button {
+        background-color: #ff6b00;
+        border-color: #ff6b00;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 30px;
+        font-weight: 500;
+        margin-bottom: 30px;
+        transition: all 0.3s ease;
+    }
+    .action-button:hover {
+        background-color: #e05d00;
+        border-color: #e05d00;
+        color: white;
+    }
+    .subtitle {
+        font-size: 1.2rem;
+        color: #fff;
+        margin: 20px 0;
+    }
+    .empty-state {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border: none;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+    }
+</style>
 
-        @if($courses->count() > 0)
-            <div class="card mt-4">
-                <div class="card-header bg-light">
-                    <h3 class="mb-0">Certificados del Curso: {{ $courses->first()->title }}</h3>
-                </div>
-                <div class="card-body">
-                    @if(optional($courses->first()->certificates)->isEmpty() ?? true)
-                        <p class="text-muted">Ningún estudiante ha solicitado un certificado para este curso todavía.</p>
+<div class="dashboard-container">
+    <div class="dashboard-title">Panel de Profesor</div>
+    
+    <a href="{{ route('teacher.courses.create') }}" class="btn action-button">
+        <i class="fas fa-plus"></i> Crear Nuevo Curso
+    </a>
+
+    <div class="subtitle">Mis Cursos</div>
+    
+    @if($courses->count() > 0)
+        <div class="content-grid">
+            @foreach($courses as $course)
+                <div class="content-card">
+                    @if($course->image)
+                        <img src="{{ asset('storage/' . $course->image) }}" alt="{{ $course->title }}">
                     @else
-                        <h5 class="card-subtitle mb-2 text-muted">Estudiantes que han solicitado certificado:</h5>
-                        <ul class="list-group list-group-flush">
-                            @foreach($courses->first()->certificates as $certificate)
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <strong>{{ $certificate->full_name }}</strong><br>
-                                        <small class="text-muted">Email: {{ $certificate->email }}</small>
-                                    </div>
-                                    <span class="badge bg-secondary rounded-pill">
-                                        Solicitado el: {{ $certificate->issued_at->format('d/m/Y H:i') }}
-                                    </span>
-                                </li>
-                            @endforeach
-                        </ul>
+                        <div style="height: 180px; background-color: #f5f5f5; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-book fa-3x text-secondary"></i>
+                        </div>
                     @endif
+                    <div class="card-body">
+                        <h3>{{ $course->title }}</h3>
+                        <p>{{ Str::limit($course->description, 100) }}</p>
+                        <div class="btn-group w-100" role="group">
+                            <a href="{{ route('courses.show', $course) }}" class="btn btn-info">Ver</a>
+                            <a href="{{ route('teacher.courses.edit', $course) }}" class="btn btn-primary">Editar</a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        @endif
-    </div>
+            @endforeach
+        </div>
+    @else
+        <div class="empty-state">
+            No has creado ningún curso todavía. ¡Crea tu primer curso!
+        </div>
+    @endif
 </div>
 @endsection
