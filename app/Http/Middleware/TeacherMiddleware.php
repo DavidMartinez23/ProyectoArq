@@ -18,16 +18,22 @@ class TeacherMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        // Verificar si el usuario está autenticado
         if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Debes iniciar sesión primero.');
+            return redirect()->route('login')
+                ->with('error', 'Debes iniciar sesión primero.');
+        }
+
+        $user = Auth::user();
+        
+        // Verificar si el usuario tiene rol de profesor
+        if (!$user || $user->role !== User::ROLE_TEACHER) {
+            // Redirigir al dashboard con mensaje de error
+            return redirect()->route('dashboard')
+                ->with('error', 'No tienes permisos para acceder al panel de profesor. Esta área es solo para profesores.');
         }
         
-        if (Auth::user()->role !== User::ROLE_TEACHER) {
-            return response()->view('errors.403', [
-                'message' => 'No tienes permisos para acceder a esta sección. Esta área es solo para profesores.'
-            ], 403);
-        }
-        
+        // Si todo está bien, continuar con la solicitud
         return $next($request);
     }
 }
