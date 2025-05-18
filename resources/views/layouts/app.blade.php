@@ -255,7 +255,7 @@
                     <li><a href="#"><i class="fas fa-book"></i> Mis Cursos</a></li>
                     <li><a href="#"><i class="fas fa-chart-line"></i> Mi Progreso</a></li>
                     <li><a href="#"><i class="fas fa-certificate"></i> Certificados</a></li>
-                    <li><a href="#"><i class="fas fa-comments"></i> Chat</a></li>
+                    <li><a href="#"><i class="fas fa-comments"></i> Foro</a></li>
                 </ul>
             </div>
             <nav class="top-nav">

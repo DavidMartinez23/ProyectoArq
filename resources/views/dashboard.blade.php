@@ -8,25 +8,38 @@
         padding: 20px;
     }
     .search-bar {
-        background-color: #f8f9fa;
-        padding: 20px;
-        border-radius: 10px;
+        background-color: transparent;
+        padding: 0;
         margin-bottom: 30px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        width: 100%;
     }
     .search-input {
         width: 100%;
         padding: 12px 20px;
-        border: 1px solid #ddd;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        background-color: rgba(255, 255, 255, 0.5);
         border-radius: 30px;
         font-size: 16px;
+        color: #333;
+        font-weight: 400;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+    .search-input::placeholder {
+        color: rgba(102, 102, 102, 0.8);
+        font-weight: 300;
+    }
+    .search-input:focus {
+        outline: none;
+        border-color: rgba(255, 255, 255, 0.8);
+        background-color: rgba(255, 255, 255, 0.7);
     }
     .dashboard-title {
         font-size: 1.5rem;
         font-weight: 600;
         margin-bottom: 20px;
-        color: #333;
-        border-bottom: 2px solid #eee;
+        color: #fff;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.2);
         padding-bottom: 10px;
     }
     .content-grid {
@@ -103,7 +116,7 @@
             </div>
         @empty
             <div class="col-12">
-                <div class="alert alert-info">
+                <div class="alert alert-info" style="background-color: rgba(255, 255, 255, 0.1); color: #fff; border: none;">
                     No hay cursos disponibles en este momento.
                 </div>
             </div>
