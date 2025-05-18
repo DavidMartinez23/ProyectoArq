@@ -68,8 +68,24 @@
             </div>
         </div>
 
+        <div class="mb-4">
+            <label for="role" class="block text-gray-600">Rol</label>
+            <div class="relative">
+                <select id="role" name="role" required 
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 appearance-none bg-white">
+                    <option value="student">Estudiante</option>
+                    <option value="teacher">Profesor</option>
+                </select>
+                <span class="absolute inset-y-0 right-3 flex items-center text-gray-500 pointer-events-none">
+                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                </span>
+            </div>
+        </div>
+
         <div class="mb-4 flex items-center">
-            <input type="checkbox" id="remember" class="mr-2">
+            <input type="checkbox" id="remember" name="remember" class="mr-2">
             <label for="remember" class="text-gray-600">Recuérdame</label>
         </div>
 

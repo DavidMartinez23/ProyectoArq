@@ -13,7 +13,6 @@
             <a href="{{ route('teacher.dashboard') }}" class="list-group-item list-group-item-action">
                 Mis Cursos
             </a>
-            <!-- Agrega más enlaces si lo deseas -->
         </div>
     </div>
     <div class="col-md-9">
@@ -74,18 +73,19 @@
                 @endif
             </div>
         </div>
-        <div class="card">
-            <div class="card-header bg-light">
-                    <h3 class="mb-0">{{ $course->title }}</h3>
+
+        @if($courses->count() > 0)
+            <div class="card mt-4">
+                <div class="card-header bg-light">
+                    <h3 class="mb-0">Certificados del Curso: {{ $courses->first()->title }}</h3>
                 </div>
                 <div class="card-body">
-                    {{-- Cambiamos esta condición para que sea más robusta --}}
-                    @if(optional($course->certificates)->isEmpty() ?? true)
+                    @if(optional($courses->first()->certificates)->isEmpty() ?? true)
                         <p class="text-muted">Ningún estudiante ha solicitado un certificado para este curso todavía.</p>
                     @else
                         <h5 class="card-subtitle mb-2 text-muted">Estudiantes que han solicitado certificado:</h5>
                         <ul class="list-group list-group-flush">
-                            @foreach($course->certificates as $certificate)
+                            @foreach($courses->first()->certificates as $certificate)
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <div>
                                         <strong>{{ $certificate->full_name }}</strong><br>
@@ -100,7 +100,7 @@
                     @endif
                 </div>
             </div>
-        </div>
+        @endif
     </div>
 </div>
 @endsection

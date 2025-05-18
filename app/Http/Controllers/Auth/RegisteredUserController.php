@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Validation\Rules;
 
 class RegisteredUserController extends Controller
 {
@@ -15,7 +17,7 @@ class RegisteredUserController extends Controller
      */
     public function create()
     {
-        return view('auth.register'); // Asegúrate de que esta vista exista
+        return view('auth.register');
     }
 
     /**
@@ -23,24 +25,33 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
-        // Validar los datos del formulario
+        // Validar los datos del formulario incluyendo el rol
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => ['required', 'string', 'in:student,teacher'], // Validación del rol
         ]);
 
-        // Guardar usuario en la base de datos
+        // Crear el usuario con el rol seleccionado
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $request->role, // Asignar el rol seleccionado
         ]);
+
+        // Disparar evento de registro
+        event(new Registered($user));
 
         // Iniciar sesión automáticamente
         Auth::login($user);
 
-        // Redirigir al dashboard
-        return redirect()->route('dashboard')->with('success', 'Registro exitoso');
+        // Redirigir según el rol
+        if ($user->role === 'teacher') {
+            return redirect()->route('teacher.dashboard')->with('success', 'Registro exitoso como profesor');
+        }
+
+        return redirect()->route('dashboard')->with('success', 'Registro exitoso como estudiante');
     }
 }
