@@ -66,15 +66,6 @@
                 <span class="help-text">Ingresa el código de inserción de YouTube</span>
             </div>
             
-            <div class="form-section">
-                <label for="status" class="form-label">Estado del Curso</label>
-                <select class="form-select @error('status') is-invalid @enderror" id="status" name="status">
-                    <option value="draft">Borrador</option>
-                    <option value="published">Publicado</option>
-                </select>
-                <span class="help-text">Los cursos en borrador no serán visibles para los estudiantes hasta que los publiques.</span>
-            </div>
-            
             <div class="button-group">
                 <a href="{{ route('teacher.dashboard') }}" class="btn-secondary">Cancelar</a>
                 <button type="submit" class="btn-primary">Crear Curso</button>
@@ -139,12 +130,12 @@
     }
 
     .form-input::placeholder {
-        color: rgba(0, 0, 0, 0.6); /* Cambiado el color del placeholder */
+        color: rgba(0, 0, 0, 0.6);
     }
 
     .form-select {
-        background-color: rgba(255, 255, 255, 0.9); /* Fondo más claro para los selects */
-        color: #333; /* Color de texto más oscuro */
+        background-color: rgba(255, 255, 255, 0.9);
+        color: #333;
     }
 
     .form-select option {
@@ -238,7 +229,6 @@
 
 @section('scripts')
 <script>
-    // Vista previa del video de YouTube
     document.getElementById('video_url').addEventListener('change', function() {
         const videoUrl = this.value;
         if (videoUrl && videoUrl.includes('youtube.com/watch?v=')) {
@@ -256,7 +246,6 @@
                 </div>
             `;
             
-            // Eliminar vista previa anterior si existe
             const oldPreview = this.parentNode.nextElementSibling.nextElementSibling;
             if (oldPreview && oldPreview.classList.contains('mt-3')) {
                 oldPreview.remove();
@@ -266,4 +255,5 @@
         }
     });
 </script>
+@endsection
 @endsection

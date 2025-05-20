@@ -38,7 +38,34 @@ class TeacherCourseController extends Controller
         ]);
 
         $course = new Course();
-        $course->user_id = Auth::id();
+        $course->title = $request->title;
+        $course->description = $request->description;
+        $course->user_id = auth()->id();
+        $course->status = 'published'; // Siempre publicado
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('courses', 'public');
+            $course->image = $path;
+        }
+
+        $course->save();
+
+        return redirect()->route('teacher.courses.edit', $course)
+            ->with('success', 'Curso creado correctamente.');
+    }
+
+    public function update(Request $request, Course $course)
+    {
+        if ($course->user_id !== Auth::id()) {
+            return redirect()->route('teacher.courses.index')
+                ->with('error', 'No tienes permisos para editar este curso');
+        }
+
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+        ]);
+
         $course->title = $request->title;
         $course->description = $request->description;
         
@@ -49,7 +76,8 @@ class TeacherCourseController extends Controller
         
         $course->save();
 
-        return redirect()->route('teacher.courses.edit', $course)->with('success', 'Curso creado correctamente');
+        return redirect()->route('teacher.courses.edit', $course)
+            ->with('success', 'Curso actualizado correctamente');
     }
 
     public function show(Course $course)
@@ -73,7 +101,8 @@ class TeacherCourseController extends Controller
     public function update(Request $request, Course $course)
     {
         if ($course->user_id !== Auth::id()) {
-            return redirect()->route('teacher.courses.index')->with('error', 'No tienes permisos para editar este curso');
+            return redirect()->route('teacher.courses.index')
+                ->with('error', 'No tienes permisos para editar este curso');
         }
 
         $request->validate([
@@ -91,7 +120,8 @@ class TeacherCourseController extends Controller
         
         $course->save();
 
-        return redirect()->route('teacher.courses.edit', $course)->with('success', 'Curso actualizado correctamente');
+        return redirect()->route('teacher.courses.edit', $course)
+            ->with('success', 'Curso actualizado correctamente');
     }
 
     public function destroy(Course $course)

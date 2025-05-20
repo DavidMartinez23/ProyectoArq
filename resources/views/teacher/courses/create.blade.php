@@ -43,29 +43,10 @@
             </select>
         </div>
         
-        <div class="form-group mb-4">
+        <div class="form-group">
             <label for="image" class="form-label">Imagen del Curso</label>
-            <input type="file" class="form-input file-input" id="image" name="image">
-            <small class="help-text">Imagen de portada para el curso (opcional)</small>
-            @error('image')
-                <div class="error-message">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="form-group mb-4">
-            <label for="video_url" class="form-label">Video de Introducción (YouTube)</label>
-            <input type="text" class="form-input" id="video_url" name="video_url" 
-                   placeholder="Ej: https://www.youtube.com/embed/XXXXXXXXXXX">
-            <small class="help-text">Ingresa el código de inserción de YouTube</small>
-        </div>
-
-        <div class="form-group mb-4">
-            <label for="status" class="form-label">Estado del Curso</label>
-            <select class="form-select" id="status" name="status" required>
-                <option value="draft">Borrador</option>
-                <option value="published">Publicado</option>
-            </select>
-            <small class="help-text">Los cursos en borrador no serán visibles para los estudiantes hasta que los publiques.</small>
+            <input type="file" class="form-input" id="image" name="image">
+            <small class="text-muted">Imagen de portada para el curso (opcional)</small>
         </div>
         
         <div class="button-group">

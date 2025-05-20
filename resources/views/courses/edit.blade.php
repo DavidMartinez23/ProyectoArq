@@ -57,6 +57,17 @@
                     <button type="submit" class="btn-primary">Actualizar Curso</button>
                 </div>
             </form>
+
+            <form action="{{ route('teacher.courses.destroy', $course) }}" 
+                  method="POST" 
+                  class="delete-form"
+                  onsubmit="return confirm('¿Estás seguro de que deseas eliminar este curso? Esta acción no se puede deshacer.');">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn-delete">
+                    <i class="fas fa-trash"></i> Eliminar Curso
+                </button>
+            </form>
         </div>
         
         <div class="modules-section">
@@ -365,6 +376,28 @@
             width: 100%;
             text-align: center;
         }
+    }
+    .delete-form {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-delete {
+        background-color: #dc3545;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-delete:hover {
+        background-color: #c82333;
     }
 </style>
 @endsection

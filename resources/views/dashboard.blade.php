@@ -48,37 +48,6 @@
         gap: 20px;
         margin-bottom: 40px;
     }
-    .content-card {
-        background: #fff;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-        transition: transform 0.3s ease;
-    }
-    .content-card:hover {
-        transform: translateY(-5px);
-    }
-    .content-card img {
-        width: 100%;
-        height: 180px;
-        object-fit: cover;
-    }
-    .content-card .card-body {
-        padding: 15px;
-    }
-    .content-card h3 {
-        margin-top: 0;
-        font-size: 18px;
-        font-weight: 600;
-    }
-    .content-card p {
-        color: #666;
-        font-size: 14px;
-        margin-bottom: 15px;
-    }
-    .content-card .btn {
-        width: 100%;
-    }
     @media (max-width: 768px) {
         .content-grid {
             grid-template-columns: 1fr;
@@ -97,7 +66,7 @@
         <input type="text" class="search-input" placeholder="¿Qué quieres aprender?">
     </div>
 
-    <div class="dashboard-title">Mis Cursos</div>
+    <div class="dashboard-title">Cursos Disponibles</div>
     <div class="content-grid">
         @forelse($courses as $course)
             <div class="teacher-course-card">
@@ -112,16 +81,16 @@
                 </div>
                 <div class="course-content">
                     <h3 class="course-title">{{ $course->title }}</h3>
+                    <p class="course-teacher">Profesor: {{ $course->teacher->name }}</p>
                     <p class="course-description">{{ Str::limit($course->description, 100) }}</p>
                     <div class="course-actions">
-                        <a href="{{ route('courses.show', $course) }}" class="btn-view">Ver</a>
-                        <a href="{{ route('teacher.courses.edit', $course) }}" class="btn-edit">Editar</a>
+                        <a href="{{ route('courses.show', $course) }}" class="btn-view">Ver Curso</a>
                     </div>
                 </div>
             </div>
         @empty
             <div class="no-courses">
-                <p>No has creado ningún curso todavía. ¡Crea tu primer curso!</p>
+                <p>No hay cursos disponibles en este momento.</p>
             </div>
         @endforelse
     </div>
@@ -178,14 +147,14 @@
         padding: 1.5rem;
     }
 
-    .course-title {
+    .course-content .course-title {
         font-size: 1.4rem;
         font-weight: 600;
-        color: #fff;
+        color: rgba(255, 255, 255, 0.9);
         margin: 0 0 1rem 0;
     }
 
-    .course-description {
+    .course-content .course-description {
         color: rgba(255, 255, 255, 0.8);
         font-size: 0.95rem;
         line-height: 1.5;
@@ -195,52 +164,32 @@
 
     .course-actions {
         display: flex;
-        gap: 1rem;
+        justify-content: center;
     }
 
-    .btn-view, .btn-edit {
-        flex: 1;
+    .course-teacher {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+
+    .btn-view {
+        width: 100%;
         padding: 0.75rem 1.5rem;
         border-radius: 8px;
         font-weight: 500;
         text-align: center;
         text-decoration: none;
         transition: all 0.3s ease;
-    }
-
-    .btn-view {
-        background: rgba(255, 255, 255, 0.1);
-        color: #fff;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .btn-edit {
         background: #ff6b00;
         color: #fff;
         border: none;
     }
 
     .btn-view:hover {
-        background: rgba(255, 255, 255, 0.2);
-    }
-
-    .btn-edit:hover {
         background: #ff8533;
-    }
-
-    .no-courses {
-        grid-column: 1 / -1;
-        text-align: center;
-        padding: 2rem;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 10px;
-        color: #fff;
-    }
-
-    @media (max-width: 768px) {
-        .course-actions {
-            flex-direction: column;
-        }
+        transform: translateY(-2px);
     }
 </style>
 @endsection

@@ -30,6 +30,11 @@
                         <div class="course-content">
                             <h4 class="course-title">{{ $course->title }}</h4>
                             <p class="course-description">{{ Str::limit($course->description, 100) }}</p>
+                            <div class="course-status">
+                                <span class="status-badge status-published">
+                                    Publicado
+                                </span>
+                            </div>
                             <div class="course-actions">
                                 <a href="{{ route('courses.show', $course) }}" class="btn-view">Ver</a>
                                 <a href="{{ route('teacher.courses.edit', $course) }}" class="btn-edit">Editar</a>
@@ -129,6 +134,30 @@
         backdrop-filter: blur(10px);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         border: 1px solid rgba(255, 255, 255, 0.2);
+        position: relative; /* Agregado para posicionar el badge */
+    }
+
+    .status-badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        z-index: 1;
+    }
+
+    .status-draft {
+        background-color: rgba(255, 193, 7, 0.2);
+        color: #ffc107;
+        border: 1px solid rgba(255, 193, 7, 0.3);
+    }
+
+    .status-published {
+        background-color: rgba(40, 167, 69, 0.2);
+        color: #28a745;
+        border: 1px solid rgba(40, 167, 69, 0.3);
     }
 
     .course-card:hover {
@@ -190,6 +219,74 @@
     .course-actions {
         display: flex;
         gap: 1rem;
+    }
+
+    .btn-view, .btn-edit {
+        flex: 1;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        text-align: center;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-view {
+        background: rgba(255, 107, 0, 0.2);
+        color: #ff6b00;
+        border: 1px solid rgba(255, 107, 0, 0.4);
+    }
+
+    .btn-view:hover {
+        background: rgba(255, 107, 0, 0.3);
+        border-color: rgba(255, 107, 0, 0.6);
+    }
+
+    .btn-edit {
+        background: #ff6b00;
+        color: #fff;
+        border: none;
+    }
+
+    .btn-edit:hover {
+        background: #ff8533;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        color: #fff;
+    }
+
+    .empty-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .course-status {
+        margin-bottom: 1rem;
+    }
+
+    .status-badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: 1rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .status-draft {
+        background-color: rgba(255, 193, 7, 0.2);
+        color: #ffc107;
+        border: 1px solid rgba(255, 193, 7, 0.3);
+    }
+
+    .status-published {
+        background-color: rgba(40, 167, 69, 0.2);
+        color: #28a745;
+        border: 1px solid rgba(40, 167, 69, 0.3);
     }
 
     .btn-view, .btn-edit {

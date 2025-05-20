@@ -9,12 +9,20 @@ class Course extends Model
 {
     use HasFactory;
 
+    const STATUS_DRAFT = 'draft';
+    const STATUS_PUBLISHED = 'published';
+
     protected $fillable = [
         'title',
         'description',
         'image',
         'video_url',
         'user_id',
+        'status',
+    ];
+
+    protected $attributes = [
+        'status' => self::STATUS_DRAFT, // Valor por defecto
     ];
 
     /**

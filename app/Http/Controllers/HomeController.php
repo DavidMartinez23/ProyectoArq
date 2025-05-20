@@ -11,7 +11,10 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $courses = \App\Models\Course::latest()->take(6)->get();
+        $courses = \App\Models\Course::where('status', 'published')
+            ->latest()
+            ->take(6)
+            ->get();
         return view('dashboard', compact('courses'));
     }
 }
