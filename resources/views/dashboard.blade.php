@@ -97,30 +97,150 @@
         <input type="text" class="search-input" placeholder="¿Qué quieres aprender?">
     </div>
 
-    <div class="dashboard-title">Cursos Recomendados</div>
+    <div class="dashboard-title">Mis Cursos</div>
     <div class="content-grid">
         @forelse($courses as $course)
-            <div class="content-card" style="background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.1);">
-                @if($course->image)
-                    <img src="{{ asset('storage/' . $course->image) }}" alt="{{ $course->title }}" style="width:100%;height:180px;object-fit:cover;">
-                @else
-                    <div style="height: 180px; background-color: #f5f5f5; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-book fa-3x text-secondary"></i>
+            <div class="teacher-course-card">
+                <div class="course-image">
+                    @if($course->image)
+                        <img src="{{ asset('storage/' . $course->image) }}" alt="{{ $course->title }}">
+                    @else
+                        <div class="no-image">
+                            <i class="fas fa-book"></i>
+                        </div>
+                    @endif
+                </div>
+                <div class="course-content">
+                    <h3 class="course-title">{{ $course->title }}</h3>
+                    <p class="course-description">{{ Str::limit($course->description, 100) }}</p>
+                    <div class="course-actions">
+                        <a href="{{ route('courses.show', $course) }}" class="btn-view">Ver</a>
+                        <a href="{{ route('teacher.courses.edit', $course) }}" class="btn-edit">Editar</a>
                     </div>
-                @endif
-                <div class="card-body" style="padding: 15px;">
-                    <h3 style="margin-top:0;font-size:18px;font-weight:600;">{{ $course->title }}</h3>
-                    <p style="color:#666;font-size:14px;margin-bottom:15px;">{{ Str::limit($course->description, 100) }}</p>
-                    <a href="{{ route('courses.show', $course) }}" class="btn btn-primary" style="width:100%;">Ver curso</a>
                 </div>
             </div>
         @empty
-            <div class="col-12">
-                <div class="alert alert-info" style="background-color: rgba(255, 255, 255, 0.1); color: #fff; border: none;">
-                    No hay cursos disponibles en este momento.
-                </div>
+            <div class="no-courses">
+                <p>No has creado ningún curso todavía. ¡Crea tu primer curso!</p>
             </div>
         @endforelse
     </div>
 </div>
+
+<style>
+    .teacher-course-card {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .teacher-course-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .course-image {
+        position: relative;
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+    }
+
+    .course-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .teacher-course-card:hover .course-image img {
+        transform: scale(1.05);
+    }
+
+    .no-image {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    .no-image i {
+        font-size: 3rem;
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .course-content {
+        padding: 1.5rem;
+    }
+
+    .course-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #fff;
+        margin: 0 0 1rem 0;
+    }
+
+    .course-description {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin-bottom: 1.5rem;
+        min-height: 3rem;
+    }
+
+    .course-actions {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .btn-view, .btn-edit {
+        flex: 1;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        text-align: center;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-view {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-edit {
+        background: #ff6b00;
+        color: #fff;
+        border: none;
+    }
+
+    .btn-view:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-edit:hover {
+        background: #ff8533;
+    }
+
+    .no-courses {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        color: #fff;
+    }
+
+    @media (max-width: 768px) {
+        .course-actions {
+            flex-direction: column;
+        }
+    }
+</style>
 @endsection
