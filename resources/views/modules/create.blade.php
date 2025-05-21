@@ -14,6 +14,7 @@
             <form action="{{ route('teacher.modules.store', $course->id) }}" method="POST" class="module-form">
                 @csrf
                 
+                
                 <div class="form-section">
                     <label for="title" class="form-label">Título del Módulo</label>
                     <input type="text" class="form-input @error('title') is-invalid @enderror" 
@@ -285,7 +286,6 @@
         }
     }
 </style>
-@endsection
 
 @section('scripts')
 <script>

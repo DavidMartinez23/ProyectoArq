@@ -7,6 +7,9 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- Archivos del editor -->
+    <link href="{{ asset('css/editor.css') }}" rel="stylesheet">
+    <script src="{{ asset('js/editor.js') }}"></script>
     <style>
         :root {
             --primary-color: #ff6b00;
