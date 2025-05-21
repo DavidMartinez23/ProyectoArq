@@ -11,6 +11,8 @@ use App\Http\Controllers\CertificateController; // Agregar esta línea
 use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ForumController;
+
 // Rutas básicas
 Route::get('/', function () {
     if (Auth::check()) {
@@ -36,6 +38,16 @@ Route::get('/welcome', function () { return view('welcome'); })->name('welcome')
 // Rutas de autenticación
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
 Route::post('/register', [RegisteredUserController::class, 'store']);
+
+// Rutas para el foro (accesible para todos los usuarios autenticados)
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/forum', [ForumController::class, 'index'])->name('forum.index');
+    Route::post('/forum', [ForumController::class, 'store'])->name('forum.store');
+    Route::delete('/forum/{comment}', [ForumController::class, 'destroy'])->name('forum.destroy');
+    Route::post('/forum/{comment}/like', [ForumController::class, 'like'])->name('forum.like');
+    Route::post('/forum/{comment}/reply', [ForumController::class, 'reply'])->name('forum.reply');
+    Route::post('/forum/{comment}/pin', [ForumController::class, 'pin'])->name('forum.pin');
+});
 
 // Rutas de perfil
 Route::middleware('auth')->group(function () {

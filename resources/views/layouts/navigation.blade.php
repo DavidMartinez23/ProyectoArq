@@ -16,11 +16,13 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="px-4 py-2 text-sm">
                         {{ __('Inicio') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('my-courses')" class="px-4 py-2 text-sm">
+                    <x-nav-link :href="route('courses.index')" :active="request()->routeIs('courses.index')" class="px-4 py-2 text-sm">
                         {{ __('Mis Cursos') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('forum.index')" :active="request()->routeIs('forum.index')" class="px-4 py-2 text-sm">
+                        {{ __('Foro') }}
+                    </x-nav-link>
                 </div>
-            </div>
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -73,6 +75,9 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('forum.index')" :active="request()->routeIs('forum.index')">
+                {{ __('Foro') }}
             </x-responsive-nav-link>
         </div>
 

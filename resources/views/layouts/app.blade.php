@@ -287,6 +287,7 @@
     <div class="main-content">
         @yield('content')
     </div>
+    @stack('scripts')
 </body>
 </html>
 <style>
@@ -670,20 +671,56 @@
         }
         
         .comment {
-            padding: 1rem;
-            border-bottom: 1px solid #eee;
-            margin-bottom: 1rem;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
-        
+
+        .comment-teacher {
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.1) 0%, rgba(255, 107, 0, 0.05) 100%);
+            border-left: 4px solid #ff6b00;
+        }
+
         .comment-author {
-            font-weight: bold;
-            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
         }
-        
+
+        .author-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .author-role {
+            font-size: 0.85rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .role-teacher {
+            background-color: #ff6b00;
+            color: white;
+        }
+
+        .role-student {
+            background-color: rgba(0, 0, 0, 0.1);
+            color: #666;
+        }
+
+        .comment-content {
+            color: #444;
+            line-height: 1.6;
+        }
+
         .comment-date {
             color: #888;
-            font-size: 0.75rem;
-            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
         }
         
         /* Estilos para formularios */
