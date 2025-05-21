@@ -14,6 +14,16 @@ use Illuminate\Support\Facades\Auth;
 
 class CertificateController extends Controller
 {
+    public function index()
+{
+    // Obtener todos los certificados del usuario ordenados por fecha de emisión
+    $certificates = Certificate::where('user_id', Auth::id())
+                    ->with(['course', 'course.teacher']) // Carga anticipada de relaciones
+                    ->orderBy('issued_at', 'desc')
+                    ->get();
+    
+    return view('certificates.index', compact('certificates'));
+}
     public function generate(Course $course)
     {
         $user = Auth::user();
@@ -40,9 +50,26 @@ class CertificateController extends Controller
 
         return view('certificates.request', compact('course'));
     }
+    
 
     public function store(Request $request, Course $course)
     {
+{
+    $request->validate([
+        'full_name' => 'required|string|max:255',
+    ]);
+
+    // Crear un nuevo certificado sin afectar los existentes
+    $certificate = Certificate::create([
+        'user_id' => Auth::id(),
+        'course_id' => $course->id,
+        'full_name' => $request->full_name,
+        'email' => Auth::user()->email,
+        'issued_at' => now(),
+    ]);
+
+    return redirect()->route('certificates.success', $certificate);
+}
         $user = Auth::user();
 
         $validated = $request->validate([
@@ -66,6 +93,7 @@ class CertificateController extends Controller
                                  ->with('error', 'Aún no has completado todos los módulos de este curso.');
             }
         }
+        
 
         $certificate = Certificate::updateOrCreate(
             [
@@ -95,5 +123,18 @@ class CertificateController extends Controller
         }
         // Puedes simplificar esta vista o mantenerla si el mensaje de sesión es suficiente
         return view('certificates.success', compact('certificate'));
+    }
+    public function download(Certificate $certificate)
+    {
+        // Verificar que el certificado pertenece al usuario autenticado
+        if ($certificate->user_id !== Auth::id()) {
+            abort(403, 'No tienes permiso para descargar este certificado.');
+        }
+
+        // Por ahora, retornaremos una respuesta temporal
+        return response()->json([
+            'message' => 'Función de descarga en desarrollo',
+            'certificate' => $certificate
+        ]);
     }
 }

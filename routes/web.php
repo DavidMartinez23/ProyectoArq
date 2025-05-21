@@ -7,10 +7,10 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\CertificateController; // Agregar esta línea
 use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-
 // Rutas básicas
 Route::get('/', function () {
     if (Auth::check()) {
@@ -81,9 +81,25 @@ Route::middleware('auth')->group(function () {
 });
 
 // Rutas para certificados
-Route::get('/courses/{course}/certificates/generate', [App\Http\Controllers\CertificateController::class, 'generate'])->name('certificates.generate')->middleware('auth');
-Route::post('/courses/{course}/certificates', [App\Http\Controllers\CertificateController::class, 'store'])->name('certificates.store')->middleware('auth');
-Route::get('/certificates/{certificate}/success', [App\Http\Controllers\CertificateController::class, 'success'])->name('certificates.success')->middleware('auth');
-Route::get('/certificates/{certificate}/download', [App\Http\Controllers\CertificateController::class, 'download'])->name('certificates.download');
+Route::middleware('auth')->group(function () {
+    // Vista principal de certificados
+    Route::get('/certificates', [CertificateController::class, 'index'])->name('certificates.index');
+    
+    // Generar certificado
+    Route::get('/courses/{course}/certificates/generate', [CertificateController::class, 'generate'])
+        ->name('certificates.generate');
+    
+    // Almacenar certificado
+    Route::post('/courses/{course}/certificates', [CertificateController::class, 'store'])
+        ->name('certificates.store');
+    
+    // Página de éxito
+    Route::get('/certificates/{certificate}/success', [CertificateController::class, 'success'])
+        ->name('certificates.success');
+    
+        // Descargar certificado
+    Route::get('/certificates/{certificate}/download', [CertificateController::class, 'download'])
+    ->name('certificates.download');
+});
 
 require __DIR__.'/auth.php';
