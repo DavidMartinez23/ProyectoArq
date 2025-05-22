@@ -14,9 +14,7 @@
                         <h3>{{ $certificate->course->title }}</h3>
                         <p class="teacher">Profesor: {{ $certificate->course->teacher->name }}</p>
                         <p class="description">{{ Str::limit($certificate->course->description, 100) }}</p>
-                        <a href="{{ route('certificates.download', $certificate) }}" class="btn-primary">
-                            Descargar Certificado
-                        </a>
+                        
                     </div>
                 </div>
             @empty

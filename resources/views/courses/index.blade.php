@@ -20,7 +20,7 @@
                             <h5 class="card-title">{{ $course->title }}</h5>
                             <p class="card-text">{{ Str::limit($course->description, 100) }}</p>
                             <p class="card-text text-muted mt-auto">
-                                <small>Profesor: {{ $course->user->name }}</small>
+                                <small>Profesor: {{ $course->teacher ? $course->teacher->name : 'No asignado' }}</small>
                             </p>
                             <a href="{{ route('courses.show', $course) }}" class="btn btn-primary mt-auto">Ver Curso</a>
                         </div>
@@ -36,4 +36,44 @@
         @endif
     </div>
 </div>
+
+<style>
+    .card {
+        transition: transform 0.3s ease;
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .card-title {
+        color: #ff6b00;
+    }
+
+    .card-text {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .btn-primary {
+        background-color: #ff6b00;
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background-color: #ff8533;
+    }
+
+    h1 {
+        color: #ffffff;
+        margin-bottom: 2rem;
+    }
+
+    .alert-info {
+        background-color: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: #ffffff;
+    }
+</style>
 @endsection

@@ -2,35 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Course; // Make sure Course model is imported
+use App\Models\Course;
 use App\Models\Module;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; // Añadir esta línea para importar la fachada Auth
+use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller
 {
     public function index()
     {
-        $courses = Course::latest()->get();
+        $courses = Course::with('teacher')->latest()->get();
         return view('courses.index', compact('courses'));
     }
 
     public function show(Course $course)
     {
-        // Eager load relationships to prevent N+1 issues and ensure they are available
-        $course->load(['teacher', 'modules', 'comments.user']); // 'comments.user' to also load the user for each comment
+        $course->load(['teacher', 'modules', 'comments.user']);
 
-        // Verificar si el usuario está autenticado
         $progress = 0;
         $nextModule = null;
 
         if (Auth::check()) {
             $user = Auth::user();
             
-            // Calcular el progreso del usuario en este curso
             $totalModules = $course->modules->count();
             
-            // Temporalmente, establecer progreso en 0 y nextModule como el primer módulo
             $nextModule = $course->modules()->orderBy('order')->first();
         }
         
@@ -53,7 +49,7 @@ class CourseController extends Controller
         $course = new Course();
         $course->title = $validated['title'];
         $course->description = $validated['description'];
-        $course->user_id = auth()->id();
+        $course->user_id = Auth::id();
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('courses', 'public');
@@ -68,8 +64,7 @@ class CourseController extends Controller
 
     public function edit(Course $course)
     {
-        // Verificar que el curso pertenece al profesor autenticado
-        if ($course->user_id !== auth()->id()) {
+        if ($course->user_id !== Auth::id()) {
             return redirect()->route('teacher.dashboard')
                 ->with('error', 'No tienes permiso para editar este curso.');
         }
@@ -79,8 +74,7 @@ class CourseController extends Controller
 
     public function update(Request $request, Course $course)
     {
-        // Verificar que el curso pertenece al profesor autenticado
-        if ($course->user_id !== auth()->id()) {
+        if ($course->user_id !== Auth::id()) {
             return redirect()->route('teacher.dashboard')
                 ->with('error', 'No tienes permiso para editar este curso.');
         }
@@ -107,8 +101,7 @@ class CourseController extends Controller
 
     public function destroy(Course $course)
     {
-        // Verificar que el curso pertenece al profesor autenticado
-        if ($course->user_id !== auth()->id()) {
+        if ($course->user_id !== Auth::id()) {
             return redirect()->route('teacher.dashboard')
                 ->with('error', 'No tienes permiso para eliminar este curso.');
         }

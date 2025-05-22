@@ -28,10 +28,10 @@ class Course extends Model
     /**
      * El profesor que creó este curso.
      */
-    public function teacher() // O user(), como la hayas llamado
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
+    public function teacher()
+{
+    return $this->belongsTo(User::class, 'user_id');
+}
 
     /**
      * Los módulos que pertenecen a este curso.
