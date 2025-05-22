@@ -8,7 +8,7 @@
             @forelse($certificates as $certificate)
                 <div class="certificate-card">
                     <div class="certificate-image">
-                        <img src="{{ asset('images/certificate-icon.png') }}" alt="Certificado" class="course-thumbnail">
+                        <img src="{{ asset('storage/' . $certificate->course->image) }}" alt="Imagen del curso" class="course-thumbnail">
                     </div>
                     <div class="certificate-content">
                         <h3>{{ $certificate->course->title }}</h3>

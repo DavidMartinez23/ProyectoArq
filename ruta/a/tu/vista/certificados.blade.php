@@ -1,0 +1,1 @@
+<img src="{{ asset('storage/' . $certificado->curso->imagen) }}" alt="Imagen del curso" style="width:100%;height:auto;">
