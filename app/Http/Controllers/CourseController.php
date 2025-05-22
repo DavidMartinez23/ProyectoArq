@@ -9,9 +9,28 @@ use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $courses = Course::with('teacher')->latest()->get();
+        $query = Course::with('teacher');
+
+        // Implementación de búsqueda
+        if ($request->has('search')) {
+            $searchTerm = $request->search;
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('title', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('description', 'LIKE', "%{$searchTerm}%")
+                  ->orWhereHas('teacher', function($q) use ($searchTerm) {
+                      $q->where('name', 'LIKE', "%{$searchTerm}%");
+                  });
+            });
+        }
+
+        // Filtrado por categoría si existe
+        if ($request->has('category')) {
+            $query->where('category', $request->category);
+        }
+
+        $courses = $query->latest()->get();
         return view('courses.index', compact('courses'));
     }
 
@@ -25,9 +44,23 @@ class CourseController extends Controller
         if (Auth::check()) {
             $user = Auth::user();
             
+            // Calcular progreso real del usuario
             $totalModules = $course->modules->count();
+            if ($totalModules > 0) {
+                $completedModules = $course->modules()
+                    ->whereHas('completions', function($query) use ($user) {
+                        $query->where('user_id', $user->id);
+                    })->count();
+                $progress = ($completedModules / $totalModules) * 100;
+            }
             
-            $nextModule = $course->modules()->orderBy('order')->first();
+            // Obtener el siguiente módulo no completado
+            $nextModule = $course->modules()
+                ->whereDoesntHave('completions', function($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                })
+                ->orderBy('order')
+                ->first();
         }
         
         return view('courses.show', compact('course', 'progress', 'nextModule'));
@@ -44,12 +77,16 @@ class CourseController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'image' => 'nullable|image|max:2048',
+            'category' => 'nullable|string|max:50',
+            'difficulty_level' => 'nullable|string|in:principiante,intermedio,avanzado'
         ]);
 
         $course = new Course();
         $course->title = $validated['title'];
         $course->description = $validated['description'];
         $course->user_id = Auth::id();
+        $course->category = $validated['category'] ?? null;
+        $course->difficulty_level = $validated['difficulty_level'] ?? 'principiante';
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('courses', 'public');
@@ -83,10 +120,14 @@ class CourseController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'image' => 'nullable|image|max:2048',
+            'category' => 'nullable|string|max:50',
+            'difficulty_level' => 'nullable|string|in:principiante,intermedio,avanzado'
         ]);
 
         $course->title = $validated['title'];
         $course->description = $validated['description'];
+        $course->category = $validated['category'] ?? $course->category;
+        $course->difficulty_level = $validated['difficulty_level'] ?? $course->difficulty_level;
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('courses', 'public');
@@ -110,5 +151,22 @@ class CourseController extends Controller
 
         return redirect()->route('teacher.dashboard')
             ->with('success', 'Curso eliminado correctamente.');
+    }
+
+    // Método para buscar cursos (API)
+    public function search(Request $request)
+    {
+        $query = $request->get('query');
+        
+        $courses = Course::with('teacher')
+            ->where('title', 'LIKE', "%{$query}%")
+            ->orWhere('description', 'LIKE', "%{$query}%")
+            ->orWhereHas('teacher', function($q) use ($query) {
+                $q->where('name', 'LIKE', "%{$query}%");
+            })
+            ->take(5)
+            ->get();
+
+        return response()->json($courses);
     }
 }

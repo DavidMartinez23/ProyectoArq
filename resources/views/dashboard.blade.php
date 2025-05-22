@@ -63,13 +63,13 @@
 
 <div class="dashboard-container">
     <div class="search-bar">
-        <input type="text" class="search-input" placeholder="¿Qué quieres aprender?">
+        <input type="text" class="search-input" id="courseSearch" placeholder="¿Qué quieres aprender?">
     </div>
 
     <div class="dashboard-title">Cursos Disponibles</div>
-    <div class="content-grid">
+    <div class="content-grid" id="coursesGrid">
         @forelse($courses as $course)
-            <div class="teacher-course-card">
+            <div class="teacher-course-card" data-title="{{ strtolower($course->title) }}">
                 <div class="course-image">
                     @if($course->image)
                         <img src="{{ asset('storage/' . $course->image) }}" alt="{{ $course->title }}">
@@ -192,4 +192,32 @@
         transform: translateY(-2px);
     }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('courseSearch');
+    const courseCards = document.querySelectorAll('.teacher-course-card');
+
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase().trim();
+        let hasVisibleCourses = false;
+
+        courseCards.forEach(card => {
+            const title = card.getAttribute('data-title');
+            if (title.includes(searchTerm)) {
+                card.style.display = 'block';
+                hasVisibleCourses = true;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Mostrar mensaje si no hay resultados
+        const noCoursesMessage = document.querySelector('.no-courses');
+        if (noCoursesMessage) {
+            noCoursesMessage.style.display = hasVisibleCourses ? 'none' : 'block';
+        }
+    });
+});
+</script>
 @endsection
