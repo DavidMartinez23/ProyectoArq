@@ -256,7 +256,7 @@
                 <ul class="sidebar-menu">
                     <li><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i> Inicio</a></li>
                     <li><a href="{{ route('courses.index') }}"><i class="fas fa-book"></i> Mis Cursos</a></li>
-                    <li><a href="{{ route('dashboard') }}"><i class="fas fa-chart-line"></i> Mi Progreso</a></li>
+                    <li><a href="{{ route('progress.index') }}"><i class="fas fa-chart-line"></i> Mi Progreso</a></li>
                     <li><a href="{{ route('certificates.index') }}"><i class="fas fa-certificate"></i> Certificados</a></li>
                     <li><a href="{{ route('forum.index') }}"><i class="fas fa-comments"></i> Foro</a></li>
                 </ul>

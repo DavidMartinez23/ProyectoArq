@@ -7,8 +7,9 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AttendanceController;
-use App\Http\Controllers\CertificateController; // Agregar esta línea
+use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\ProgressController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ForumController;
@@ -112,6 +113,8 @@ Route::middleware('auth')->group(function () {
         // Descargar certificado
     Route::get('/certificates/{certificate}/download', [CertificateController::class, 'download'])
     ->name('certificates.download');
+    
+    Route::get('/progress', [ProgressController::class, 'index'])->name('progress.index');
 });
 
 require __DIR__.'/auth.php';
