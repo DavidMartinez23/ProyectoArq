@@ -10,13 +10,24 @@
     <div class="search-container">
         <input type="text" 
                class="search-input" 
-               placeholder="¿Qué quieres aprender?"
+               placeholder="Buscar en mis cursos"
                id="searchInput">
     </div>
     
     <div class="courses-grid" id="coursesContainer">
-        @if($courses->count() > 0)
-            @foreach($courses as $course)
+        @php
+            $activeCourses = $courses->filter(function($course) {
+                $completedModulesCount = $course->modules()
+                    ->whereHas('completedByUsers', function($query) {
+                        $query->where('user_id', Auth::id());
+                    })
+                    ->count();
+                return $completedModulesCount > 0;
+            });
+        @endphp
+
+        @if($activeCourses->count() > 0)
+            @foreach($activeCourses as $course)
                 <div class="course-card" data-title="{{ $course->title }}">
                     <div class="course-content">
                         @if($course->image)
@@ -34,7 +45,29 @@
                             <p class="course-teacher">
                                 Profesor: {{ $course->teacher ? $course->teacher->name : 'No asignado' }}
                             </p>
-                            <a href="{{ route('courses.show', $course) }}" class="btn-view">Ver Curso</a>
+                            
+                            <!-- Progreso del curso -->
+                            <div class="course-progress">
+                                @php
+                                    $completedModules = $course->modules()
+                                        ->whereHas('completedByUsers', function($query) {
+                                            $query->where('user_id', Auth::id());
+                                        })
+                                        ->count();
+                                    $totalModules = $course->modules()->count();
+                                    $progressPercentage = ($totalModules > 0) ? ($completedModules / $totalModules) * 100 : 0;
+                                @endphp
+                                <div class="progress">
+                                    <div class="progress-bar" 
+                                         style="width: {{ $progressPercentage }}%">
+                                    </div>
+                                </div>
+                                <span class="progress-text">
+                                    {{ $completedModules }}/{{ $totalModules }} Módulos completados
+                                </span>
+                            </div>
+
+                            <a href="{{ route('courses.show', $course) }}" class="btn-view">Continuar Curso</a>
                         </div>
                     </div>
                 </div>
@@ -42,7 +75,7 @@
         @else
             <div class="no-courses">
                 <div class="alert-message">
-                    No hay cursos disponibles en este momento.
+                    No has comenzado ningún curso aún. ¡Explora los cursos disponibles en el inicio!
                 </div>
             </div>
         @endif
@@ -190,6 +223,31 @@
     .no-image i {
         font-size: 3rem;
         color: #999;
+    }
+
+    .course-progress {
+        margin: 1rem 0;
+    }
+
+    .progress {
+        width: 100%;
+        height: 8px;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 0.5rem;
+    }
+
+    .progress-bar {
+        height: 100%;
+        background: #ff6b00;
+        border-radius: 4px;
+        transition: width 0.3s ease;
+    }
+
+    .progress-text {
+        font-size: 0.85rem;
+        color: #666;
     }
 </style>
 

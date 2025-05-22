@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Module extends Model
 {
@@ -11,6 +11,7 @@ class Module extends Model
 
     protected $fillable = [
         'title',
+        'description',
         'content',
         'order',
         'course_id',
@@ -39,5 +40,14 @@ class Module extends Model
         
         $videoId = $matches[1];
         return "https://www.youtube.com/embed/{$videoId}";
+    }
+    
+    /**
+     * Los usuarios que han completado este módulo
+     */
+    public function completedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'module_user', 'module_id', 'user_id')
+                    ->withTimestamps();
     }
 }
