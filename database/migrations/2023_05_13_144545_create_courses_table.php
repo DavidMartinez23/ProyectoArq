@@ -15,7 +15,9 @@ return new class extends Migration
             $table->text('description');
             $table->string('image')->nullable();
             $table->string('video_url')->nullable();
-            $table->string('status')->default('published');
+            $table->string('category')->nullable(); // Agregamos el campo category
+            $table->string('difficulty_level')->nullable(); // Agregamos el campo difficulty_level
+            $table->string('status')->default('draft');
             $table->timestamps();
         });
     }

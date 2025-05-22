@@ -1,42 +1,47 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="search-container mb-4">
+<div class="dashboard-container">
+    <div class="header-section">
+        <h2 class="page-title">Mis Cursos</h2>
+        <div class="title-underline"></div>
+    </div>
+
+    <div class="search-container">
         <input type="text" 
-               class="form-control search-input" 
+               class="search-input" 
                placeholder="¿Qué quieres aprender?"
                id="searchInput">
     </div>
-
-    <h1>Cursos Disponibles</h1>
     
-    <div class="row" id="coursesContainer">
+    <div class="courses-grid" id="coursesContainer">
         @if($courses->count() > 0)
             @foreach($courses as $course)
-                <div class="col-md-4 mb-4 course-card" data-title="{{ $course->title }}">
-                    <div class="card h-100">
+                <div class="course-card" data-title="{{ $course->title }}">
+                    <div class="course-content">
                         @if($course->image)
-                            <img src="{{ asset('storage/' . $course->image) }}" class="card-img-top" alt="{{ $course->title }}">
+                            <div class="course-image">
+                                <img src="{{ asset('storage/' . $course->image) }}" alt="{{ $course->title }}">
+                            </div>
                         @else
-                            <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
-                                <i class="fas fa-book fa-3x"></i>
+                            <div class="course-image no-image">
+                                <i class="fas fa-book"></i>
                             </div>
                         @endif
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">{{ $course->title }}</h5>
-                            <p class="card-text">{{ Str::limit($course->description, 100) }}</p>
-                            <p class="card-text text-muted mt-auto">
-                                <small>Profesor: {{ $course->teacher ? $course->teacher->name : 'No asignado' }}</small>
+                        <div class="course-info">
+                            <h3 class="course-title">{{ $course->title }}</h3>
+                            <p class="course-description">{{ Str::limit($course->description, 100) }}</p>
+                            <p class="course-teacher">
+                                Profesor: {{ $course->teacher ? $course->teacher->name : 'No asignado' }}
                             </p>
-                            <a href="{{ route('courses.show', $course) }}" class="btn btn-primary mt-auto">Ver Curso</a>
+                            <a href="{{ route('courses.show', $course) }}" class="btn-view">Ver Curso</a>
                         </div>
                     </div>
                 </div>
             @endforeach
         @else
-            <div class="col-12">
-                <div class="alert alert-info">
+            <div class="no-courses">
+                <div class="alert-message">
                     No hay cursos disponibles en este momento.
                 </div>
             </div>
@@ -45,113 +50,146 @@
 </div>
 
 <style>
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .header-section {
+        margin-bottom: 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        padding-bottom: 0.5rem;
+    }
+
+    .page-title {
+        font-size: 1.8rem;
+        font-weight: 500;
+        color: #fff;
+        margin: 0;
+        padding: 0.5rem 0;
+    }
+
+    .title-underline {
+        width: 50px;
+        height: 3px;
+        background-color: #ff6b00;
+        margin-top: 0.5rem;
+    }
+
     .search-container {
-        position: relative;
         max-width: 800px;
         margin: 0 auto 2rem;
     }
 
     .search-input {
-        background: rgba(255, 255, 255, 0.1);
-        border: 2px solid rgba(255, 107, 0, 0.3);
-        color: #fff;
-        padding: 1rem;
-        border-radius: 25px;
-        font-size: 1.1rem;
+        width: 100%;
+        padding: 12px 20px;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: 30px;
+        font-size: 16px;
+        color: #333;
+        font-weight: 400;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         transition: all 0.3s ease;
     }
 
-    .search-input:focus {
-        border-color: #ff6b00;
-        box-shadow: 0 0 15px rgba(255, 107, 0, 0.2);
-        background: rgba(255, 255, 255, 0.15);
-    }
-
-    .btn-search {
-        background: #ff6b00;
-        color: white;
-        border: none;
-        border-radius: 0 25px 25px 0;
-        padding: 0 1.5rem;
-        transition: background 0.3s ease;
-    }
-
-    .btn-search:hover {
-        background: #ff8533;
-    }
-
-    .card {
-        transition: all 0.3s ease;
-        background: rgba(255, 255, 255, 0.1);
-        border: none;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .card-title {
-        color: #ff6b00;
-        font-weight: 600;
-    }
-
-    .card-text {
-        color: rgba(255, 255, 255, 0.8);
-    }
-
-    .btn-primary {
-        background-color: #ff6b00;
-        border: none;
-        padding: 0.5rem 1.5rem;
-        transition: all 0.3s ease;
-    }
-
-    .btn-primary:hover {
-        background-color: #ff8533;
-        transform: translateY(-2px);
-    }
-
-    h1 {
-        color: #ffffff;
-        margin-bottom: 2rem;
-        text-align: center;
-        font-weight: 600;
-    }
-
-    .alert-info {
-        background-color: rgba(255, 255, 255, 0.1);
-        border: none;
-        color: #ffffff;
-    }
-
-    .card-img-top {
-        height: 200px;
-        object-fit: cover;
+    .courses-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 2rem;
     }
 
     .course-card {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 15px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+
+    .course-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .course-image {
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+    }
+
+    .course-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .course-info {
+        padding: 1.5rem;
+    }
+
+    .course-title {
+        color: #333;
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .course-description {
+        color: #666;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+    }
+
+    .course-teacher {
+        color: #555;
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-view {
+        display: inline-block;
+        background: #ff6b00;
+        color: white;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 500;
         transition: all 0.3s ease;
-        opacity: 1;
-        transform: scale(1);
+        width: 100%;
+        text-align: center;
     }
 
-    .course-card.hidden {
-        opacity: 0;
-        transform: scale(0.8);
-        pointer-events: none;
+    .btn-view:hover {
+        background: #ff8533;
+        transform: translateY(-2px);
     }
 
-    .no-results {
-        opacity: 0;
-        transform: translateY(-20px);
-        transition: all 0.3s ease;
+    .no-courses {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 2rem;
     }
 
-    .no-results.show {
-        opacity: 1;
-        transform: translateY(0);
+    .alert-message {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 1rem 2rem;
+        border-radius: 8px;
+        color: #666;
+    }
+
+    .no-image {
+        background: #f5f5f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .no-image i {
+        font-size: 3rem;
+        color: #999;
     }
 </style>
 

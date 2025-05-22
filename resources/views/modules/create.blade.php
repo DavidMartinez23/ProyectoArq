@@ -26,8 +26,13 @@
                 
                 <div class="form-section">
                     <label for="order" class="form-label">Orden</label>
-                    <input type="number" class="form-input @error('order') is-invalid @enderror" 
-                           id="order" name="order" value="{{ $nextOrder ?? 1 }}" min="1">
+                    <input type="number" 
+                           class="form-input" 
+                           id="order" 
+                           name="order" 
+                           value="{{ old('order', $nextOrder ?? 1) }}" 
+                           min="1" 
+                           required>
                     <span class="help-text">Posición del módulo en el curso</span>
                     @error('order')
                         <div class="error-message">{{ $message }}</div>
@@ -288,6 +293,25 @@
 </style>
 
 @section('scripts')
+<style>
+    /* Estilo para el input de orden */
+    input[type="number"] {
+        color: #333 !important; /* Color de texto oscuro */
+        background-color: rgba(255, 255, 255, 0.9) !important; /* Fondo semi-transparente */
+    }
+
+    /* Estilo para el placeholder */
+    input[type="number"]::placeholder {
+        color: rgba(0, 0, 0, 0.5);
+    }
+
+    /* Estilo para cuando el input está enfocado */
+    input[type="number"]:focus {
+        color: #333 !important;
+        background-color: #fff !important;
+        border-color: #ff6b00 !important;
+    }
+</style>
 <script>
     // Vista previa del video de YouTube
     document.getElementById('video_url').addEventListener('change', function() {

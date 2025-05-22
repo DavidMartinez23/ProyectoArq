@@ -19,6 +19,8 @@ class Course extends Model
         'video_url',
         'user_id',
         'status',
+        'category',
+        'difficulty_level'
     ];
 
     protected $attributes = [

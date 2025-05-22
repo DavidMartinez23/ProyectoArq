@@ -11,16 +11,20 @@ class Module extends Model
 
     protected $fillable = [
         'title',
-        'description',
         'content',
-        'video_url',
         'order',
-        'course_id'
+        'course_id',
+        'video_url'
     ];
 
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+    
+    public function completions()
+    {
+        return $this->hasMany(ModuleUser::class);
     }
     
     public function getYoutubeEmbedAttribute()
